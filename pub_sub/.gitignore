@@ -3,4 +3,3 @@ dist
 *.key
 *.pem
 *.crt
-*.csr
