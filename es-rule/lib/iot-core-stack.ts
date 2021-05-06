@@ -1,7 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 import * as iam from '@aws-cdk/aws-iam';
 import * as iot from '@aws-cdk/aws-iot';
-import { PolicyStatement } from '@aws-cdk/aws-iam';
 
 const timestamp = new Date().getTime();
 
@@ -14,6 +13,7 @@ export class IoTCoreStack extends cdk.Stack {
 
     const provisioningRole = new iam.Role(this, 'test-role-for-provisioning', {
       assumedBy: new iam.ServicePrincipal('iot.amazonaws.com'),
+      roleName: `es-test-role-for-provisioning-${timestamp}`,
       managedPolicies: [
         iam.ManagedPolicy.fromManagedPolicyArn(
           this,
@@ -24,7 +24,7 @@ export class IoTCoreStack extends cdk.Stack {
     });
 
     const thingPolicy = new iot.CfnPolicy(this, 'test-thing-policy', {
-      policyName: `es-test-policy-${timestamp}`,
+      policyName: `es-test-thing-policy-${timestamp}`,
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -102,7 +102,7 @@ export class IoTCoreStack extends cdk.Stack {
       assumedBy: new iam.ServicePrincipal('iot.amazonaws.com'),
     });
     ruleRole.addToPolicy(
-      new PolicyStatement({ resources: ['*'], actions: ['es:ESHttpPut'] }),
+      new iam.PolicyStatement({ resources: ['*'], actions: ['es:ESHttpPut'] }),
     );
 
     const esDomain = this.node.tryGetContext('esDomain');

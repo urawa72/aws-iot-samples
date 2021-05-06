@@ -13,7 +13,7 @@ export class EsStack extends cdk.Stack {
     const statement = new iam.PolicyStatement({ effect: iam.Effect.ALLOW });
     statement.addArnPrincipal('*');
     statement.addActions('es:*');
-    statement.addCondition('IpAddress', { 'aws:SourceIp': 'Ip Address' });
+    statement.addCondition('IpAddress', { 'aws:SourceIp': '192.168.0.1' });
     statement.addResources(
       `arn:aws:es:${region}:${accountId}:domain/my-test-${timestamp}/*`,
     );
