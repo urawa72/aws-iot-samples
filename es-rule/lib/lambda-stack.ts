@@ -14,6 +14,7 @@ export class LambdaStack extends cdk.Stack {
       functionName: 'test-es-index-create-pre-hook',
       handler: 'index.handler',
       runtime: lambda.Runtime.NODEJS_14_X,
+      timeout: cdk.Duration.seconds(30),
       memorySize: 256,
       environment: { ES_DOMAIN: esDomain },
     });

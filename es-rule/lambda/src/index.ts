@@ -31,10 +31,27 @@ export const handler = async (event: Event): Promise<Result> => {
     node: `https://${ES_DOMAIN}`,
   });
 
-  const res = await client.indices.create({
-    index: event.parameters.SerialNumber,
-  });
-  console.log(res);
+  // indexの存在チェック
+  try {
+    const res = await client.indices.exists({
+      index: event.parameters.SerialNumber,
+    });
+    console.log(res);
+    if (res.body) {
+      return {
+        allowProvisioning: false,
+      };
+    } else {
+      await client.indices.create({
+        index: event.parameters.SerialNumber,
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    return {
+      allowProvisioning: false,
+    };
+  }
 
   return {
     allowProvisioning: true,
